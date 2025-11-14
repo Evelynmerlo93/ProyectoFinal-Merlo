@@ -1,23 +1,37 @@
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { products } from "../data/products";
-import ItemCount from "./ItemCount"; // Importamos ItemCount
-import { useCart } from "../context/CartContext"; // Importamos el contexto
+import { db } from "../service/Firebase"; 
+import { doc, getDoc } from "firebase/firestore";
+import ItemCount from "./ItemCount";
+import { useCart } from "../context/CartContext.jsx";
 
 export default function ItemDetailContainer() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const { addToCart } = useCart(); // Extraemos la función del carrito
+  const { addToCart } = useCart();
+
+  // ✅ Estado para el mensaje de éxito
+  const [successMsg, setSuccessMsg] = useState("");
+
+  // Función para agregar al carrito y mostrar mensaje (MOVIDA AL INICIO)
+  const handleAddToCart = (quantity) => {
+    addToCart(product, quantity);
+    setSuccessMsg(`¡Agregaste ${quantity} ${product.name}(s) al carrito!`);
+
+    // Limpiar mensaje después de 3 segundos
+    setTimeout(() => setSuccessMsg(""), 3000);
+  };
 
   useEffect(() => {
-    const getProduct = new Promise((resolve) => {
-      setTimeout(() => {
-        const foundProduct = products.find((p) => p.id === parseInt(id));
-        resolve(foundProduct);
-      }, 500);
+    // ⚠️ CORRECCIÓN: Asumo que la colección en Firebase es 'products' (minúscula)
+    // según convenciones, pero mantenemos 'Products' si es así
+    const docRef = doc(db, "Products", id); 
+    
+    getDoc(docRef).then((res) => {
+      if (res.exists()) {
+        setProduct({ id: res.id, ...res.data() });
+      }
     });
-
-    getProduct.then((res) => setProduct(res));
   }, [id]);
 
   if (!product) return <h2 style={{ textAlign: "center" }}>Cargando...</h2>;
@@ -33,12 +47,15 @@ export default function ItemDetailContainer() {
       <h2>${product.price}</h2>
       <p>{product.description}</p>
 
-      {/* Aquí agregamos el ItemCount para añadir al carrito */}
-      <ItemCount
-        stock={10}
-        initial={1}
-        onAdd={(quantity) => addToCart(product, quantity)}
-      />
+      {/* ItemCount usa la función corregida */}
+      <ItemCount stock={10} initial={1} onAdd={handleAddToCart} />
+
+      {/* Mensaje de éxito */}
+      {successMsg && (
+        <p style={{ marginTop: "15px", color: "#ff1493", fontWeight: "bold" }}>
+          {successMsg}
+        </p>
+      )}
     </div>
   );
 }

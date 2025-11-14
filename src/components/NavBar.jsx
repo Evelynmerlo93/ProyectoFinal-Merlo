@@ -1,10 +1,27 @@
+import { useEffect, useState } from "react";
 import { NavLink, Link } from "react-router-dom";
-import { products } from "../data/products"; // ajusta la ruta si es distinta
 import CartWidget from "./CartWidget";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../service/firebase";
 
 export default function NavBar() {
-  // Creamos un array de categorías únicas
-  const categories = [...new Set(products.map((p) => p.category))];
+  const [categories, setCategories] = useState([]);
+
+  // 🔥 Traemos las categorías desde Firebase
+  useEffect(() => {
+    const productsRef = collection(db, "products"); // 👈 nombre de tu colección
+
+    getDocs(productsRef)
+      .then((snapshot) => {
+        // Creamos un array con todas las categorías sin repetir
+        const allProducts = snapshot.docs.map((doc) => doc.data());
+        const uniqueCategories = [...new Set(allProducts.map((p) => p.category))]; // 👈 asegúrate que el campo se llama "category"
+        setCategories(uniqueCategories);
+      })
+      .catch((error) => {
+        console.error("Error al cargar categorías:", error);
+      });
+  }, []);
 
   return (
     <nav
