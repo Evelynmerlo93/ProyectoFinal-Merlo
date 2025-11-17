@@ -50,7 +50,8 @@ y diseño de experiencias fluidas, sin recargar la página.
 
 ## 📹 Vista previa del proyecto  
 
-👉 https://github.com/user-attachments/assets/131e43de-35eb-4e3b-8f95-521a128f5aa2
+👉 https://github.com/user-attachments/assets/e04606c2-de10-4e17-88c3-99fa978e9ad9
+
 
 
 
