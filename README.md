@@ -50,7 +50,9 @@ y diseño de experiencias fluidas, sin recargar la página.
 
 ## 📹 Vista previa del proyecto  
 
-👉 https://github.com/user-attachments/assets/068f1470-e2fc-48d6-817b-525eb7f42faf
+👉 https://github.com/user-attachments/assets/131e43de-35eb-4e3b-8f95-521a128f5aa2
+
+
 
 ---
 
@@ -69,14 +71,18 @@ Iniciar el servidor:
 
 npm run dev
 
+---
+
 💖 Agradecimientos
 
 Gracias a los profes y tutores del curso por el acompañamiento constante.
 Este proyecto fue una gran oportunidad para afianzar mis conocimientos en React y Firebase.
 
+
+---
 📄 Licencia
 
 Proyecto académico desarrollado para Coderhouse.
-Su uso es libre con fines educativos.
+Su uso es libre con fines educativos. 
 
 
